@@ -20,7 +20,7 @@ router.get("/:id", async (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
   try {
-    const oneTag = Tag.findByPk(req.params.id, {
+    const oneTag = await Tag.findByPk(req.params.id, {
       include: [{ model: Product }],
     });
     res.status(200).json(oneTag);
@@ -29,13 +29,23 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+// Create a new tag (and any associated new ProductTags)
 router.post("/", async (req, res) => {
+    /* req.body should look like this...
+    {
+      tag_name: "Sports",
+      prodIds: [1, 2, 3, 4]
+    }
+  */
+
   // create a new tag
   try {
     const newTag = await Tag.create({
       tag_name: req.body.tag_name,
     });
 
+    // If there are any defined new product ID's
     if (req.body.prodIds.length) {
       const productTagIdArr = req.body.prodIds.map((product_id) => {
         return {
@@ -43,15 +53,18 @@ router.post("/", async (req, res) => {
           tag_id: newTag.id,
         };
       });
-      return ProductTag.bulkCreate(productTagIdArr);
+      ProductTag.bulkCreate(productTagIdArr);
     }
 
     // In the case of no products to tag, just return the bare tag
     res.status(200).json(newTag);
   } catch (err) {
-    res.status(500).json(err);
+    console.log(err);
+    res.status(400).json(err);
   }
 });
+
+
 
 router.put("/:id", async (req, res) => {
   /* req.body should look like this...
