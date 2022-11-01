@@ -22,7 +22,7 @@ Run "npm i" in the project directory after cloning. Edit the .env.EXAMPLE file t
 
 Run "node server" in the project directory. Interact with the backend using tools such as Insomnia to test routes (such as localhost:3001/api/products/) and utilize the db functionality.
 
-Youtube demonstration video: https://youtu.be/rXlrvd4aZjY
+Youtube demonstration video: https://youtu.be/g3VAQU-lCBA
 
 ## Tests
 
