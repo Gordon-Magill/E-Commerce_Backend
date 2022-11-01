@@ -1,5 +1,8 @@
 # E-Commerce Backend
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+![Deployed page](./assets/readme_image.png)
+
 ## Description
 
 A simple backend using sequelize, express, and node to handle database access and control for an e-commerce site (geared around products, tags, categories, etc.). Use of an API testing platform (like Insomnia) is recommended for use.
