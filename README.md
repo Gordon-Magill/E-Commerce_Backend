@@ -1,6 +1,5 @@
 # E-Commerce Backend
-[![License: Do What the Fuck You Want to Public License](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/)
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Description
 
 A simple backend using sequelize, express, and node to handle database access and control for an e-commerce site (geared around products, tags, categories, etc.). Use of an API testing platform (like Insomnia) is recommended for use.
@@ -40,4 +39,4 @@ Please reach out via provided email for any questions.
 
 ## License
 
-Licensed under [Do What the Fuck You Want to Public License](http://www.wtfpl.net/about/).
+Licensed under [MIT](https://opensource.org/licenses/MIT).
