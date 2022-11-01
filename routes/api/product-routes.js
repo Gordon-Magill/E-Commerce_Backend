@@ -3,37 +3,41 @@ const { Product, Category, Tag, ProductTag } = require("../../models");
 
 // The `/api/products` endpoint
 
-// get all products
+// Get all existing products
 router.get("/", async (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
+  
   try {
+    // Find all products
     const allProds = await Product.findAll({
-      include: [{ model: Category }, { model: Tag }],
+      include: [{ model: Category }, { model: Tag }], // Include associated categories and tags
     });
+    // Respond with all queried content
     res.status(200).json(allProds);
   } catch (err) {
+    // Send back the error if one is thrown
     res.status(500).json(err);
   }
 });
 
-// get one product
+// Get one product by ID
 router.get("/:id", async (req, res) => {
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
+
   try {
+    // Get one product by ID
     const oneProd = await Product.findByPk(req.params.id, {
-      include: [{ model: Category }, { model: Tag }],
+      include: [{ model: Category }, { model: Tag }], // Include associated categories and tags
     });
+    // Respond with queried content
     res.status(200).json(oneProd);
   } catch (err) {
+    // Send back the error if one is thrown
     res.status(500).json(err);
   }
 });
 
 
 
-// create new product
+// Create a new product
 router.post("/", (req, res) => {
   /* req.body should look like this...
     {
@@ -55,11 +59,13 @@ router.post("/", (req, res) => {
         });
         return ProductTag.bulkCreate(productTagIdArr);
       }
-      // if no product tags, just respond
+
+      // Respond with all new content if no tagIds were defined
       res.status(200).json(product);
     })
-    .then((productTagIds) => res.status(200).json(productTagIds))
+    .then((productTagIds) => res.status(200).json(productTagIds)) //Respond with all created content if tagId's were defined
     .catch((err) => {
+      // Send back the error if one is thrown
       console.log(err);
       res.status(400).json(err);
     });
@@ -67,9 +73,9 @@ router.post("/", (req, res) => {
 
 
 
-// update product
+// Update existing product
 router.put("/:id", (req, res) => {
-  // update product data
+  // Update the product as specified by req.params.id
   Product.update(req.body, {
     where: {
       id: req.params.id,
@@ -110,21 +116,26 @@ router.put("/:id", (req, res) => {
     })
     .then((updatedProductTags) => res.json(updatedProductTags))
     .catch((err) => {
-      // console.log(err);
+      // Send back the error if one is thrown
+      console.log(err);
       res.status(400).json(err);
     });
 });
 
+// Deleting products
 router.delete("/:id", async (req, res) => {
-  // delete one product by its `id` value
+
   try {
+    // Delete product based on ID
     const delProd = await Product.destroy({
       where: {
         id: req.params.id,
       },
     });
+    // Respond with confirmation of deletion
     res.status(200).json(delProd);
   } catch (err) {
+    // Send back the error if one is thrown
     res.status(500).json(err);
   }
 });

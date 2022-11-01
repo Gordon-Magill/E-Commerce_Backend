@@ -3,28 +3,34 @@ const { Tag, Product, ProductTag } = require("../../models");
 
 // The `/api/tags` endpoint
 
+// Get all tags
 router.get("/", async (req, res) => {
-  // find all tags
-  // be sure to include its associated Product data
+
   try {
+    // Get all tags
     const allTags = await Tag.findAll({
-      include: [{ model: Product }],
+      include: [{ model: Product }], // Include associated products
     });
+    // Respond with all queried content
     res.status(200).json(allTags);
   } catch (err) {
+    // Send back the error if one is thrown
     res.status(500).json(err);
   }
 });
 
+
+// Get a tag by ID
 router.get("/:id", async (req, res) => {
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
   try {
+    // Get a tag by ID
     const oneTag = await Tag.findByPk(req.params.id, {
-      include: [{ model: Product }],
+      include: [{ model: Product }], // Include associated products
     });
+    // Respond with all queried content
     res.status(200).json(oneTag);
   } catch (err) {
+    // Send back the error if one is thrown
     res.status(500).json(err);
   }
 });
@@ -39,26 +45,29 @@ router.post("/", async (req, res) => {
     }
   */
 
-  // create a new tag
   try {
+    // Create a new tag
     const newTag = await Tag.create({
       tag_name: req.body.tag_name,
     });
 
-    // If there are any defined new product ID's
+    // If there are any defined new product ID's...
     if (req.body.prodIds.length) {
+      // Create an array of objects that define new ProductTag entities
       const productTagIdArr = req.body.prodIds.map((product_id) => {
         return {
           product_id,
           tag_id: newTag.id,
         };
       });
+      // Create the actual ProductTag entries based on the generated array
       ProductTag.bulkCreate(productTagIdArr);
     }
 
-    // In the case of no products to tag, just return the bare tag
+    // Respond with the created tag only
     res.status(200).json(newTag);
   } catch (err) {
+    // Send back the error if one is thrown
     console.log(err);
     res.status(400).json(err);
   }
@@ -74,9 +83,8 @@ router.put("/:id", async (req, res) => {
     }
   */
 
-  // update a tag's name by its `id` value
   try {
-    // Update the target tag's name (the only parameter that can be updated)
+    // Update Tag by ID
     const updTag = await Tag.update(
       {
         tag_name: req.body.tag_name,
@@ -88,7 +96,7 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    // Get all ProductTag's associated with the tag being modified
+    // Get all ProductTags associated with the tag being modified
     const associatedProductTags = await ProductTag.findAll({
       where: {
         tag_id: req.params.id,
@@ -129,22 +137,28 @@ router.put("/:id", async (req, res) => {
       ProductTag.bulkCreate(newTagProducts),
     ]);
 
-    res.status(200).json(completedActions);
+    // Respond back with the updated tag
+    res.status(200).json(updTag);
   } catch (err) {
+    // Send back the error if one is thrown
     res.status(500).json(err);
   }
 });
 
+// Delete tag by id value
 router.delete("/:id", async (req, res) => {
-  // delete on tag by its `id` value
+
   try {
+    // Delete tag by id value
     const delTag = await Tag.destroy({
       where: {
         id: req.params.id,
       },
     });
+    // Respond with deletion confirmation
     res.status(200).json(delTag);
   } catch (err) {
+    // Send back the error if one is thrown
     res.status(500).json(err);
   }
 });
